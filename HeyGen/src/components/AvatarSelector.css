@@ -1,0 +1,7 @@
+.avatar-img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain; /* 👈 prevents zoom/crop */
+  background-color: #f8f9fa; /* light gray background */
+  border-bottom: 1px solid #e0e0e0;
+}
