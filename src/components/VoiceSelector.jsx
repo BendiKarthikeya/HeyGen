@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 
 function VoiceSelector({ onSelect }) {
@@ -12,7 +12,7 @@ function VoiceSelector({ onSelect }) {
         const response = await fetch("https://api.heygen.com/v2/voices", {
           headers: {
             "accept": "application/json",
-            "x-api-key": "ZGNkODExYTg5ZDAxNDgzMmIzOWZlMjliMTUzNWU4NDktMTc1NTQ5MTc3NQ==", // ⚠️ replace
+            "x-api-key": import.meta.env.VITE_HEYGEN_API_KEY,
           },
         });
         const data = await response.json();
@@ -51,7 +51,7 @@ function VoiceSelector({ onSelect }) {
                     new Audio(voice.preview_audio).play();
                   }}
                 >
-                  ▶ Preview
+                   Preview
                 </button>
               </div>
             </div>

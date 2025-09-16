@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import "./AvatarSelector.css";
 
@@ -14,7 +14,7 @@ function AvatarSelector({ onSelect }) {
         const response = await fetch("https://api.heygen.com/v2/avatars", {
           headers: {
             "accept": "application/json",
-            "x-api-key": "ZGNkODExYTg5ZDAxNDgzMmIzOWZlMjliMTUzNWU4NDktMTc1NTQ5MTc3NQ==", // ⚠️ replace with your HeyGen key
+            "x-api-key": import.meta.env.VITE_HEYGEN_API_KEY,
           },
         });
         const data = await response.json();
