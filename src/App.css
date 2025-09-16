@@ -1,0 +1,25 @@
+﻿/* Custom styles for Heygen MVP */
+@media (max-width: 767.98px) {
+  .main-content {
+    margin-left: 0 !important;
+    padding: 1rem !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    margin-left: 250px !important;
+  }
+}
+
+.sidebar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-mobile {
+  transform: translateX(-100%);
+}
+
+.sidebar-mobile.open {
+  transform: translateX(0);
+}

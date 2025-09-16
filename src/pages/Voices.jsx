@@ -1,4 +1,4 @@
-import VoiceSelector from "../components/VoiceSelector";
+﻿import VoiceSelector from "../components/VoiceSelector";
 import { useSelection } from "../context/SelectionContext";
 
 function Voices() {
@@ -12,9 +12,12 @@ function Voices() {
           <span className="badge text-bg-light">Current: {voiceId || "None"}</span>
         </div>
         <VoiceSelector onSelect={setVoiceId} />
+        <div className="text-center mt-4">
+          <button className="btn btn-outline-primary">Load More</button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Voices; 
+export default Voices;

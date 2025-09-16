@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import Loader from "../components/Loader";
 import { useSelection } from "../context/SelectionContext";
 import { Link } from "react-router";
@@ -11,7 +11,7 @@ function VideoGenerator() {
 
   const { avatarId, voiceId } = useSelection();
 
-  const webhookUrl = "http://localhost:5680/webhook/ab52cfc2-34b4-41f4-9062-6d7dc54d9f4f";
+  const webhookUrl = "http://localhost:5680/webhook-test/3cbe6321-10d6-42ff-adca-5e7c7ea21a81";
   const MAX_WORDS = 160;
 
   const wordCount = useMemo(() => {
@@ -84,71 +84,86 @@ function VideoGenerator() {
   return (
     <div className="container-fluid">
       <div className="p-4 bg-white rounded shadow-sm">
-        <h2 className="mb-3">Create Video</h2>
-        <div className="row g-4">
-          <div className="col-12 col-lg-5">
-            <div className="mb-2">
-              <span className="badge text-bg-light me-2">Avatar: {avatarId || "None"}</span>
-              <span className="badge text-bg-light">Voice: {voiceId || "None"}</span>
-            </div>
-            <div className="d-flex gap-2">
-              <Link to="/avatars" className="btn btn-outline-secondary btn-sm">
-                <i className="bi bi-person me-1"></i> Choose Avatar
-              </Link>
-              <Link to="/voices" className="btn btn-outline-secondary btn-sm">
-                <i className="bi bi-mic me-1"></i> Choose Voice
-              </Link>
+        <h2 className="mb-3">Create Your Video</h2>
+        
+        <div className="row g-4 mb-4">
+          <div className="col-12 col-md-6">
+            <h5>Selected Avatar</h5>
+            <div className="card">
+              <div className="card-body text-center">
+                <div className="mb-2">
+                  <span className="badge text-bg-primary">{avatarId || "None Selected"}</span>
+                </div>
+                <Link to="/avatars" className="btn btn-outline-secondary btn-sm">
+                  Choose Avatar
+                </Link>
+              </div>
             </div>
           </div>
-
-          <div className="col-12 col-lg-7">
-            <div className="mb-2 d-flex align-items-center justify-content-between">
-              <label className="form-label mb-0">Prompt</label>
-              <small className={wordCount > MAX_WORDS ? "text-danger" : "text-muted"}>
-                {wordCount}/{MAX_WORDS} words
-              </small>
-            </div>
-            <textarea
-              className="form-control"
-              rows="8"
-              value={prompt}
-              onChange={handlePromptChange}
-              placeholder="Type what your avatar should say... (max 160 words)"
-            ></textarea>
-
-            <button
-              type="button"
-              className="btn btn-primary mt-3 w-100"
-              onClick={handleCreate}
-              disabled={loading || !prompt || !avatarId || !voiceId || wordCount === 0 || wordCount > MAX_WORDS}
-            >
-              {loading ? "Creating..." : "Create Video"}
-            </button>
-
-            <div className="mt-4">
-              {loading && <Loader />}
-              {error && (
-                <div className="alert alert-danger mt-3" role="alert">
-                  {error}
+          
+          <div className="col-12 col-md-6">
+            <h5>Selected Voice</h5>
+            <div className="card">
+              <div className="card-body text-center">
+                <div className="mb-2">
+                  <span className="badge text-bg-primary">{voiceId || "None Selected"}</span>
                 </div>
-              )}
-              {!loading && !error && videoUrl && (
-                <div className="card p-3 shadow-sm">
-                  <h6 className="mb-2">Your Video</h6>
-                  <video
-                    src={videoUrl}
-                    controls
-                    className="w-100 mt-2 rounded"
-                    style={{ maxHeight: "420px" }}
-                  />
-                </div>
-              )}
+                <Link to="/voices" className="btn btn-outline-secondary btn-sm">
+                  Choose Voice
+                </Link>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Script</label>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <small className="text-muted">Enter what your avatar should say</small>
+            <small className={wordCount > MAX_WORDS ? "text-danger" : "text-muted"}>
+              {wordCount}/{MAX_WORDS} words
+            </small>
+          </div>
+          <textarea
+            className="form-control"
+            rows="6"
+            value={prompt}
+            onChange={handlePromptChange}
+            placeholder="Type your script here... (max 160 words)"
+          ></textarea>
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-primary btn-lg w-100"
+          onClick={handleCreate}
+          disabled={loading || !prompt || !avatarId || !voiceId || wordCount === 0 || wordCount > MAX_WORDS}
+        >
+          {loading ? "Generating Video..." : "Generate Video"}
+        </button>
+
+        <div className="mt-4">
+          {loading && <Loader />}
+          {error && (
+            <div className="alert alert-danger mt-3" role="alert">
+              {error}
+            </div>
+          )}
+          {!loading && !error && videoUrl && (
+            <div className="card p-3 shadow-sm">
+              <h6 className="mb-2">Your Video</h6>
+              <video
+                src={videoUrl}
+                controls
+                className="w-100 mt-2 rounded"
+                style={{ maxHeight: "420px" }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default VideoGenerator; 
+export default VideoGenerator;

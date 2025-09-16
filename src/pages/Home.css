@@ -1,0 +1,201 @@
+﻿/* Home Page Styles */
+.home-page {
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.min-vh-50 {
+  min-height: 50vh;
+}
+
+/* Step Cards */
+.step-card {
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+}
+
+.step-icon {
+  transition: all 0.3s ease;
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.1);
+}
+
+/* Feature Cards */
+.feature-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  border-color: #007bff;
+}
+
+.feature-icon {
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+/* Use Case Cards */
+.use-case-card {
+  transition: all 0.3s ease;
+}
+
+.use-case-card:hover {
+  transform: translateY(-5px);
+}
+
+.use-case-icon {
+  transition: all 0.3s ease;
+}
+
+.use-case-card:hover .use-case-icon {
+  transform: scale(1.1);
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+  border-color: #007bff;
+}
+
+/* Pricing Cards */
+.pricing-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+.pricing-card.border-primary {
+  border-color: #007bff !important;
+  box-shadow: 0 5px 15px rgba(0,123,255,0.2);
+}
+
+/* Hero Visual */
+.hero-visual {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.video-placeholder {
+  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+  border: 2px dashed #dee2e6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 60vh;
+    text-align: center;
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .display-5 {
+    font-size: 2rem;
+  }
+  
+  .step-card,
+  .feature-card,
+  .use-case-card,
+  .testimonial-card,
+  .pricing-card {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Button Hover Effects */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Section Spacing */
+section {
+  position: relative;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+}
+
+/* Custom Badge */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Avatar Styles */
+.avatar {
+  font-size: 1.2rem;
+}
+
+/* Star Rating */
+.text-warning i {
+  margin-right: 2px;
+}
+
+/* List Styles */
+.list-unstyled li {
+  padding: 0.25rem 0;
+}
+
+/* Card Hover Effects */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
