@@ -61,8 +61,12 @@ npm install
 
 3. **Set up environment variables**
 ```bash
-# Create .env file
-VITE_HEYGEN_API_KEY=your_heygen_api_key_here
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env file with your API keys
+# VITE_HEYGEN_API_KEY=your_heygen_api_key_here
+# VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 4. **Start the development server**
@@ -72,6 +76,36 @@ npm run dev
 
 5. **Open your browser**
 Navigate to `http://localhost:5174`
+
+---
+
+##  **API Setup**
+
+### **Heygen API**
+1. Create an account at [Heygen](https://www.heygen.com/)
+2. Get your API key from the dashboard
+3. Add to your `.env` file:
+```bash
+VITE_HEYGEN_API_KEY=your_heygen_api_key_here
+```
+
+### **Google Gemini AI**
+1. Get API key from [Google AI Studio](https://aistudio.google.com/)
+2. Add to your `.env` file:
+```bash
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### **Environment Variables**
+Create a `.env` file in the root directory with the following variables:
+
+```bash
+# Required API Keys
+VITE_HEYGEN_API_KEY=your_heygen_api_key_here
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+** Security Note:** Never commit your `.env` file to version control. The `.env.example` file is provided as a template.
 
 ---
 
@@ -92,23 +126,6 @@ Navigate to `http://localhost:5174`
 - [ESLint](https://eslint.org/) - Code linting
 - [PostCSS](https://postcss.org/) - CSS processing
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
-
----
-
-##  **API Setup**
-
-### **Heygen API**
-1. Create an account at [Heygen](https://www.heygen.com/)
-2. Get your API key from the dashboard
-3. Add to your `.env` file:
-```bash
-VITE_HEYGEN_API_KEY=your_heygen_api_key_here
-```
-
-### **Google Gemini AI**
-1. Get API key from [Google AI Studio](https://aistudio.google.com/)
-2. The API key is already configured in the code
-3. For production, move to environment variables
 
 ---
 
@@ -140,6 +157,7 @@ HeyGen/
     App.jsx
     App.css
     main.jsx
+ .env.example
  .gitignore
  package.json
  vite.config.js
@@ -180,20 +198,32 @@ HeyGen/
 
 ### **Vercel (Recommended)**
 1. Connect your GitHub repository to Vercel
-2. Add environment variables in Vercel dashboard
+2. Add environment variables in Vercel dashboard:
+   - `VITE_HEYGEN_API_KEY`
+   - `VITE_GEMINI_API_KEY`
 3. Deploy automatically on every push
 
 ### **Netlify**
 1. Connect your GitHub repository to Netlify
 2. Set build command: `npm run build`
 3. Set publish directory: `dist`
-4. Add environment variables
+4. Add environment variables in Netlify dashboard
 
 ### **Manual Deployment**
 ```bash
 npm run build
 # Upload dist/ folder to your hosting provider
+# Don't forget to set environment variables on your hosting platform
 ```
+
+---
+
+##  **Security**
+
+- **API Keys** - Stored securely in environment variables
+- **No Hardcoded Secrets** - All sensitive data in `.env` files
+- **Git Ignore** - `.env` files are excluded from version control
+- **Environment Template** - `.env.example` provided for easy setup
 
 ---
 
@@ -203,15 +233,17 @@ We welcome contributions! Please follow these steps:
 
 1. **Fork the repository**
 2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit your changes**: `git commit -m 'Add amazing feature'`
-4. **Push to the branch**: `git push origin feature/amazing-feature`
-5. **Open a Pull Request**
+3. **Set up environment variables** using `.env.example`
+4. **Commit your changes**: `git commit -m 'Add amazing feature'`
+5. **Push to the branch**: `git push origin feature/amazing-feature`
+6. **Open a Pull Request**
 
 ### **Development Guidelines**
 - Follow the existing code style
 - Add comments for complex logic
 - Test your changes thoroughly
 - Update documentation as needed
+- Never commit API keys or sensitive data
 
 ---
 
@@ -224,45 +256,33 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-##  **Security**
-
-- API keys are handled securely
-- No sensitive data stored in client-side code
-- Environment variables for sensitive configuration
-- Regular dependency updates for security patches
-
----
-
-##  **Roadmap**
-
-- [ ] **Video Templates** - Pre-made templates for different use cases
-- [ ] **Batch Processing** - Generate multiple videos at once
-- [ ] **Custom Avatars** - Upload and use your own avatar images
-- [ ] **Advanced Editing** - Timeline editing and effects
-- [ ] **Analytics Dashboard** - Track video performance and usage
-- [ ] **Team Collaboration** - Multi-user workspaces
-- [ ] **API Documentation** - Comprehensive API reference
-
----
-
 ##  **Troubleshooting**
 
 ### **Common Issues**
 
 **API Key Not Working**
-- Verify your API key is correct
+- Verify your API key is correct in `.env` file
 - Check if the API service is enabled
 - Ensure you have sufficient credits/quota
+- Restart the development server after adding environment variables
 
 **Video Generation Fails**
 - Check your internet connection
 - Verify the script is not too long
 - Try with a shorter script first
+- Check Heygen API status
 
 **Text Generator Not Working**
 - Ensure Gemini API is enabled
 - Check if you have API quota remaining
+- Verify `VITE_GEMINI_API_KEY` is set correctly
 - Try refreshing the page
+
+**Environment Variables Not Loading**
+- Make sure `.env` file is in the root directory
+- Restart the development server
+- Check for typos in variable names
+- Ensure variables start with `VITE_`
 
 ---
 

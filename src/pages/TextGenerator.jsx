@@ -8,8 +8,8 @@ function TextGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Initialize Gemini API
-  const genAI = new GoogleGenerativeAI("AIzaSyDFopS48voVYCyC5o8gxQEUaD7ay4HO4Xg");
+  // Initialize Gemini API with environment variable
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyDFopS48voVYCyC5o8gxQEUaD7ay4HO4Xg");
 
   // Function to clean markdown formatting
   const cleanText = (text) => {
