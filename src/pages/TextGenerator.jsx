@@ -9,7 +9,7 @@ function TextGenerator() {
   const [error, setError] = useState("");
 
   // Initialize Gemini API with environment variable
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "AIzaSyDFopS48voVYCyC5o8gxQEUaD7ay4HO4Xg");
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // Function to clean markdown formatting
   const cleanText = (text) => {
