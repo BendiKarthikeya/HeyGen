@@ -9,6 +9,7 @@ import VideoGenerator from "./pages/VideoGenerator";
 import Avatars from "./pages/Avatars";
 import Voices from "./pages/Voices";
 import TextGenerator from "./pages/TextGenerator";
+import SocialPost from "./pages/SocialPost";
 import { SelectionProvider } from "./context/SelectionContext";
 import ErrorComponent from "./components/ErrorComponent";
 
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "/voices", element: <Voices /> },
       { path: "/create", element: <VideoGenerator /> },
       { path: "/text-generator", element: <TextGenerator /> },
+      { path: "/social-post", element: <SocialPost /> },
     ],
     errorElement: <ErrorComponent />,
   },

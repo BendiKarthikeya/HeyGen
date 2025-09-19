@@ -67,9 +67,7 @@ function Avatars() {
             </div>
           </div>
         )}
-        <div className="text-center mt-4">
-          <button className="btn btn-outline-primary">Load More</button>
-        </div>
+        
       </div>
     </div>
   );

@@ -12,9 +12,6 @@ function Voices() {
           <span className="badge text-bg-light">Current: {voiceId || "None"}</span>
         </div>
         <VoiceSelector onSelect={setVoiceId} />
-        <div className="text-center mt-4">
-          <button className="btn btn-outline-primary">Load More</button>
-        </div>
       </div>
     </div>
   );

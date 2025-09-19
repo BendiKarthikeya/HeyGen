@@ -72,6 +72,16 @@ function NavBarComponent() {
               <span></span>
               <span>Text Generator</span>
             </NavLink>
+            <NavLink
+              to="/social-post"
+              className={({ isActive }) =>
+                `nav-link d-flex align-items-center gap-2 py-2 ${isActive ? "active text-white bg-primary rounded" : "text-white-50"}`
+              }
+              onClick={() => setIsOpen(false)}
+            >
+              <span></span>
+              <span>Social Post</span>
+            </NavLink>
           </nav>
         </div>
       </div>
