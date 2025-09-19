@@ -5,9 +5,35 @@ import "./SocialPost.css";
 function SocialPost() {
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [showTopicInput, setShowTopicInput] = useState(false);
   const [topic, setTopic] = useState("");
+  
+  // Form data states
+  const [formData, setFormData] = useState({
+    youtube: {
+      title: "",
+      description: "",
+      tags: "",
+      thumbnail: null
+    },
+    instagram: {
+      caption: "",
+      hashtags: "",
+      media: null
+    },
+    twitter: {
+      tweetText: "",
+      hashtags: "",
+      media: null
+    },
+    linkedin: {
+      postText: "",
+      hashtags: "",
+      linkAttachment: ""
+    }
+  });
 
   // Initialize Gemini API
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -53,6 +79,26 @@ function SocialPost() {
     setShowTopicInput(false);
   };
 
+  const handleInputChange = (platform, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [platform]: {
+        ...prev[platform],
+        [field]: value
+      }
+    }));
+  };
+
+  const handleFileChange = (platform, field, file) => {
+    setFormData(prev => ({
+      ...prev,
+      [platform]: {
+        ...prev[platform],
+        [field]: file
+      }
+    }));
+  };
+
   const handleGeneratePost = async () => {
     if (!topic.trim()) {
       alert("Please enter a topic for your post");
@@ -95,10 +141,111 @@ function SocialPost() {
     }
   };
 
+  const handlePost = async () => {
+    if (!selectedPlatform) return;
+
+    // Validate required fields
+    const currentFormData = formData[selectedPlatform];
+    let isValid = true;
+    let errorMessage = "";
+
+    switch (selectedPlatform) {
+      case "youtube":
+        if (!currentFormData.title.trim()) {
+          isValid = false;
+          errorMessage = "Title is required";
+        } else if (!currentFormData.description.trim()) {
+          isValid = false;
+          errorMessage = "Description is required";
+        }
+        break;
+      case "instagram":
+        if (!currentFormData.caption.trim()) {
+          isValid = false;
+          errorMessage = "Caption is required";
+        }
+        break;
+      case "twitter":
+        if (!currentFormData.tweetText.trim()) {
+          isValid = false;
+          errorMessage = "Tweet text is required";
+        } else if (currentFormData.tweetText.length > 280) {
+          isValid = false;
+          errorMessage = "Tweet text must be 280 characters or less";
+        }
+        break;
+      case "linkedin":
+        if (!currentFormData.postText.trim()) {
+          isValid = false;
+          errorMessage = "Post text is required";
+        }
+        break;
+    }
+
+    if (!isValid) {
+      alert(errorMessage);
+      return;
+    }
+
+    setIsPosting(true);
+
+    try {
+      // Prepare data for webhook
+      const webhookData = {
+        platform: selectedPlatform,
+        timestamp: new Date().toISOString(),
+        data: currentFormData
+      };
+
+      // Send to n8n webhook
+      const response = await fetch("http://localhost:5680/webhook-test/377ba02e-8a66-4b7f-8f01-ba75848d7cef", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookData)
+      });
+
+      if (response.ok) {
+        alert("Post sent successfully!");
+        // Reset form data for the current platform
+        setFormData(prev => ({
+          ...prev,
+          [selectedPlatform]: {
+            ...prev[selectedPlatform],
+            title: "",
+            description: "",
+            tags: "",
+            caption: "",
+            hashtags: "",
+            tweetText: "",
+            postText: "",
+            linkAttachment: "",
+            thumbnail: null,
+            media: null
+          }
+        }));
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error posting:", error);
+      alert("Error posting: " + error.message);
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
+  const handleSaveDraft = () => {
+    // For now, just show an alert. You can implement local storage or API call here
+    alert("Draft saved locally!");
+  };
+
   const renderPlatformForm = () => {
     if (!selectedPlatform) return null;
 
     const platform = platforms.find(p => p.id === selectedPlatform);
+    const currentFormData = formData[selectedPlatform];
 
     return (
       <div className="platform-form-container">
@@ -121,19 +268,42 @@ function SocialPost() {
                   <div className="youtube-form">
                     <div className="mb-3">
                       <label className="form-label">Title *</label>
-                      <input type="text" className="form-control" placeholder="Enter video title" />
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Enter video title"
+                        value={currentFormData.title}
+                        onChange={(e) => handleInputChange("youtube", "title", e.target.value)}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Description *</label>
-                      <textarea className="form-control" rows="4" placeholder="Enter video description"></textarea>
+                      <textarea 
+                        className="form-control" 
+                        rows="4" 
+                        placeholder="Enter video description"
+                        value={currentFormData.description}
+                        onChange={(e) => handleInputChange("youtube", "description", e.target.value)}
+                      ></textarea>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Tags</label>
-                      <input type="text" className="form-control" placeholder="Enter tags separated by commas" />
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Enter tags separated by commas"
+                        value={currentFormData.tags}
+                        onChange={(e) => handleInputChange("youtube", "tags", e.target.value)}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Upload Thumbnail</label>
-                      <input type="file" className="form-control" accept="image/*" />
+                      <input 
+                        type="file" 
+                        className="form-control" 
+                        accept="image/*"
+                        onChange={(e) => handleFileChange("youtube", "thumbnail", e.target.files[0])}
+                      />
                     </div>
                   </div>
                 )}
@@ -142,15 +312,32 @@ function SocialPost() {
                   <div className="instagram-form">
                     <div className="mb-3">
                       <label className="form-label">Caption *</label>
-                      <textarea className="form-control" rows="4" placeholder="Write your caption"></textarea>
+                      <textarea 
+                        className="form-control" 
+                        rows="4" 
+                        placeholder="Write your caption"
+                        value={currentFormData.caption}
+                        onChange={(e) => handleInputChange("instagram", "caption", e.target.value)}
+                      ></textarea>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Hashtags</label>
-                      <input type="text" className="form-control" placeholder="Enter hashtags" />
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Enter hashtags"
+                        value={currentFormData.hashtags}
+                        onChange={(e) => handleInputChange("instagram", "hashtags", e.target.value)}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Upload Image/Video</label>
-                      <input type="file" className="form-control" accept="image/*,video/*" />
+                      <input 
+                        type="file" 
+                        className="form-control" 
+                        accept="image/*,video/*"
+                        onChange={(e) => handleFileChange("instagram", "media", e.target.files[0])}
+                      />
                     </div>
                   </div>
                 )}
@@ -164,16 +351,29 @@ function SocialPost() {
                         rows="3" 
                         placeholder="What's happening?"
                         maxLength="280"
+                        value={currentFormData.tweetText}
+                        onChange={(e) => handleInputChange("twitter", "tweetText", e.target.value)}
                       ></textarea>
-                      <div className="form-text">280 characters remaining</div>
+                      <div className="form-text">{280 - currentFormData.tweetText.length} characters remaining</div>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Hashtags</label>
-                      <input type="text" className="form-control" placeholder="Enter hashtags" />
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Enter hashtags"
+                        value={currentFormData.hashtags}
+                        onChange={(e) => handleInputChange("twitter", "hashtags", e.target.value)}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Upload Media</label>
-                      <input type="file" className="form-control" accept="image/*,video/*" />
+                      <input 
+                        type="file" 
+                        className="form-control" 
+                        accept="image/*,video/*"
+                        onChange={(e) => handleFileChange("twitter", "media", e.target.files[0])}
+                      />
                     </div>
                   </div>
                 )}
@@ -182,25 +382,59 @@ function SocialPost() {
                   <div className="linkedin-form">
                     <div className="mb-3">
                       <label className="form-label">Post Text *</label>
-                      <textarea className="form-control" rows="4" placeholder="Share your professional thoughts"></textarea>
+                      <textarea 
+                        className="form-control" 
+                        rows="4" 
+                        placeholder="Share your professional thoughts"
+                        value={currentFormData.postText}
+                        onChange={(e) => handleInputChange("linkedin", "postText", e.target.value)}
+                      ></textarea>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Hashtags</label>
-                      <input type="text" className="form-control" placeholder="Enter hashtags" />
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        placeholder="Enter hashtags"
+                        value={currentFormData.hashtags}
+                        onChange={(e) => handleInputChange("linkedin", "hashtags", e.target.value)}
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Link Attachment</label>
-                      <input type="url" className="form-control" placeholder="https://example.com" />
+                      <input 
+                        type="url" 
+                        className="form-control" 
+                        placeholder="https://example.com"
+                        value={currentFormData.linkAttachment}
+                        onChange={(e) => handleInputChange("linkedin", "linkAttachment", e.target.value)}
+                      />
                     </div>
                   </div>
                 )}
 
                 <div className="d-flex gap-2 mt-4">
-                  <button className="btn btn-primary">
+                  <button 
+                    className="btn btn-primary"
+                    onClick={handleSaveDraft}
+                  >
                     <i className="bi bi-save me-2"></i>Save Draft
                   </button>
-                  <button className="btn btn-success">
-                    <i className="bi bi-send me-2"></i>Post
+                  <button 
+                    className="btn btn-success"
+                    onClick={handlePost}
+                    disabled={isPosting}
+                  >
+                    {isPosting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2"></span>
+                        Posting...
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-send me-2"></i>Post
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
